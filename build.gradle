@@ -1,157 +1,182 @@
 plugins {
-    id "com.jfrog.bintray" version "1.7"
-    id "com.github.jruby-gradle.base" version "0.1.5"
     id "java"
+    id "java-library"
+    id "maven-publish"
+    id "signing"
     id "checkstyle"
 }
-import com.github.jrubygradle.JRubyExec
 
-allprojects {
-    group = 'org.embulk.input.s3'
-    version = '0.3.5'
+group = "org.embulk"
+version = "0.4.0-SNAPSHOT"
+description = "Library to manage AWS client credentials for Embulk plugins"
 
-    apply plugin: 'com.jfrog.bintray'
-    apply plugin: 'maven-publish'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-    // bintray
-    bintray {
-        // write at your bintray user name and api key to ~/.gradle/gradle.properties file:
-        user = project.hasProperty('bintray_user') ? bintray_user : ''
-        key = project.hasProperty('bintray_api_key') ? bintray_api_key : ''
+configurations {
+    compileClasspath.resolutionStrategy.activateDependencyLocking()
+    runtimeClasspath.resolutionStrategy.activateDependencyLocking()
+}
 
-        publications = ['mavenJava']
-        publish = true
+repositories {
+    mavenCentral()
+    jcenter()
+}
 
-        pkg {
-            userOrg = 'embulk-input-s3'
-            repo = 'maven'
-            name = project.name
-            desc = 'S3 file input plugin for Embulk'
-            websiteUrl = 'https://github.com/embulk/embulk-input-s3'
-            issueTrackerUrl = 'https://github.com/embulk/embulk-input-s3/issues'
-            vcsUrl = 'https://github.com/embulk/embulk-input-s3.git'
-            licenses = ['Apache-2.0']
-            labels = ['embulk', 'java']
-            publicDownloadNumbers = true
+dependencies {
+    compileOnly "org.embulk:embulk-api:0.10.5"
+    compileOnly "org.embulk:embulk-core:0.10.5"
 
-            version {
-                name = project.version
+    api("com.amazonaws:aws-java-sdk-s3:1.11.466") {
+        exclude group: "com.fasterxml.jackson.core", module: "jackson-annotations"
+        exclude group: "com.fasterxml.jackson.core", module: "jackson-core"
+        exclude group: "com.fasterxml.jackson.core", module: "jackson-databind"
+        exclude group: "commons-logging", module: "commons-logging"   // commons-logging api is provided by jcl-over-slf4j
+        exclude group: "joda-time", module: "joda-time"
+    }
+    api("com.amazonaws:aws-java-sdk-sts:1.11.466") {
+        exclude group: "com.fasterxml.jackson.core", module: "jackson-annotations"
+        exclude group: "com.fasterxml.jackson.core", module: "jackson-core"
+        exclude group: "com.fasterxml.jackson.core", module: "jackson-databind"
+        exclude group: "commons-logging", module: "commons-logging"   // commons-logging api is provided by jcl-over-slf4j
+        exclude group: "joda-time", module: "joda-time"
+    }
+    api("org.slf4j:jcl-over-slf4j:1.7.12") {  // aws-sdk uses Apache Commons Logging and Embulk uses slf4j
+        exclude group: "org.slf4j", module: "slf4j-api"
+    }
+
+    api "com.fasterxml.jackson.core:jackson-annotations:2.6.7"
+    api "com.fasterxml.jackson.core:jackson-core:2.6.7"
+    api "com.fasterxml.jackson.core:jackson-databind:2.6.7"
+    api "joda-time:joda-time:2.9.2"
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    options.encoding = "UTF-8"
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    title = "${project.name} v${project.version}"
+    options {
+        locale = "en_US"
+        encoding = "UTF-8"
+        overview = "src/main/html/overview.html"
+        links "https://docs.oracle.com/javase/8/docs/api/"
+    }
+}
+
+test {
+    testLogging {
+        outputs.upToDateWhen { false }
+        showStandardStreams = true
+    }
+}
+
+jar {
+    from rootProject.file("LICENSE")
+}
+
+sourcesJar {
+    from rootProject.file("LICENSE")
+}
+
+javadocJar {
+    from rootProject.file("LICENSE")
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = "${project.group}"
+            artifactId = "${project.name}"
+
+            from components.java
+            // javadocJar and sourcesJar are added by java.withJavadocJar() and java.withSourcesJar() above.
+            // See: https://docs.gradle.org/current/javadoc/org/gradle/api/plugins/JavaPluginExtension.html
+
+            pom {  // https://central.sonatype.org/pages/requirements.html
+                packaging "jar"
+
+                name = "${project.name}"
+                description = "${project.description}"
+                url = "https://www.embulk.org/"
+
+                licenses {
+                    license {
+                        // http://central.sonatype.org/pages/requirements.html#license-information
+                        name = "The Apache License, Version 2.0"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+
+                developers {
+                    developer {
+                        name = "Sadayuki Furuhashi"
+                        email = "frsyuki@gmail.com"
+                    }
+                    developer {
+                        name = "Muga Nishizawa"
+                        email = "muga.nishizawa@gmail.com"
+                    }
+                    developer {
+                        name = "Satoshi Akama"
+                        email = "satoshiakama@gmail.com"
+                    }
+                    developer {
+                        name = "Dai MIKURUBE"
+                        email = "dmikurube@treasure-data.com"
+                    }
+                }
+
+                scm {
+                    connection = "scm:git:git://github.com/embulk/embulk-util-aws-credentials.git"
+                    developerConnection = "scm:git:git@github.com:embulk/embulk-util-aws-credentials.git"
+                    url = "https://github.com/embulk/embulk-util-aws-credentials"
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {  // publishMavenPublicationToMavenCentralRepository
+            name = "mavenCentral"
+            if (project.version.endsWith("-SNAPSHOT")) {
+                url "https://oss.sonatype.org/content/repositories/snapshots"
+            } else {
+                url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            }
+
+            credentials {
+                username = project.hasProperty("ossrhUsername") ? ossrhUsername : ""
+                password = project.hasProperty("ossrhPassword") ? ossrhPassword : ""
             }
         }
     }
 }
 
-subprojects {
-    apply plugin: 'maven'  // install jar files to the local repo: $ gradle install
-    apply plugin: 'java'
-    //apply plugin: 'findbugs'
-    apply plugin: 'jacoco'
-    apply plugin: 'checkstyle'
-    apply plugin: 'com.github.jruby-gradle.base'
-
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-
-    configurations {
-        provided
-        compile.exclude group: 'commons-logging', module: 'commons-logging'   // commons-logging api is provided by jcl-over-slf4j
-    }
-
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
-    dependencies {
-        compile  "org.embulk:embulk-core:0.9.12"
-        provided "org.embulk:embulk-core:0.9.12"
-        compile "com.amazonaws:aws-java-sdk-s3:1.11.466"
-        compile "com.amazonaws:aws-java-sdk-sts:1.11.466"
-        runtime "org.slf4j:jcl-over-slf4j:1.7.12"  // aws-sdk uses Apache Commons Logging and Embulk uses slf4j
-        testCompile "junit:junit:4.+"
-        testCompile "org.mockito:mockito-core:1.+"
-        testCompile "org.embulk:embulk-standards:0.9.12"
-        testCompile "org.embulk:embulk-core:0.9.12:tests"
-    }
-
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
-            options.compilerArgs << "-Xlint:unchecked" //<< "-Xlint:deprecation"
-        }
-    }
-
-    task classpath(type: Copy, dependsOn: ["jar"]) {
-        doFirst { file('classpath').deleteDir() }
-        from (configurations.runtime - configurations.provided + files(jar.archivePath))
-        into 'classpath'
-    }
-    clean { delete 'classpath' }
-
-    if (![project(":embulk-util-aws-credentials")].contains(project)) {
-        task gem(type: JRubyExec, dependsOn: ['build', 'gemspec', 'classpath']) {
-            jrubyArgs '-rrubygems/gem_runner', "-eGem::GemRunner.new.run(ARGV)", 'build'
-            script "${project.projectDir.absolutePath}/build/gemspec"
-            doLast { ant.move(file: "${project.name}-${project.version}.gem", todir: "${parent.projectDir}/pkg") }
-        }
-    }
-
-    // publishing
-    publishing {
-        publications {
-             mavenJava(MavenPublication) {
-                 from components.java
-                 artifact testsJar
-                 artifact sourcesJar
-                 artifact javadocJar
-                 pom.withXml {
-                     asNode().dependencies.dependency.findAll() {
-                         it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
-                             dep.name == it.artifactId.text()
-                         }
-                     }.each() {
-                         it.scope*.value = 'compile'
-                     }
-                 }
-             }
-        }
-    }
-    // add tests/javadoc/source jar tasks as artifacts to be released
-    task testsJar(type: Jar, dependsOn: classes) {
-        classifier = 'tests'
-        from sourceSets.test.output
-    }
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
-    }
-    artifacts {
-        archives testsJar, sourcesJar, javadocJar
-    }
-
-    checkstyle {
-        configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
-        toolVersion = '6.14.1'
-    }
-    checkstyleMain {
-        configFile = file("${project.rootDir}/config/checkstyle/default.xml")
-        ignoreFailures = true
-    }
-    checkstyleTest {
-        configFile = file("${project.rootDir}/config/checkstyle/default.xml")
-        ignoreFailures = true
-    }
-    task checkstyle(type: Checkstyle) {
-        classpath = sourceSets.main.output + sourceSets.test.output
-        source = sourceSets.main.allJava + sourceSets.test.allJava
-    }
+signing {
+    sign publishing.publications.maven
 }
 
-task gemPush << {
-    "gem push pkg/embulk-input-s3-${project.version}.gem".execute().waitFor()
-    "gem push pkg/embulk-input-riak_cs-${project.version}.gem".execute().waitFor()
+checkstyle {
+    configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    toolVersion = '6.14.1'
 }
-
+checkstyleMain {
+    configFile = file("${project.rootDir}/config/checkstyle/default.xml")
+    ignoreFailures = true
+}
+checkstyleTest {
+    configFile = file("${project.rootDir}/config/checkstyle/default.xml")
+    ignoreFailures = true
+}
+task checkstyle(type: Checkstyle) {
+    classpath = sourceSets.main.output + sourceSets.test.output
+    source = sourceSets.main.allJava + sourceSets.test.allJava
+}
