@@ -37,4 +37,19 @@ public interface AwsCredentialsTask extends AwsCredentialsConfig {
     @Config("profile_name")
     @ConfigDefault("null")
     Optional<String> getProfileName();
+
+    @Override
+    @Config("role_arn")
+    @ConfigDefault("null")
+    Optional<String> getRoleArn();
+
+    @Override
+    @Config("role_session_name")
+    @ConfigDefault("null")
+    Optional<String> getRoleSessionName();
+
+    @Override
+    @Config("web_identity_token_file")
+    @ConfigDefault("null")
+    Optional<String> getWebIdentityTokenFile();
 }
