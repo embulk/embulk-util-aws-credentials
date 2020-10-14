@@ -14,7 +14,7 @@ interface AwsCredentialsConfig {
      * Sets an authentication method to configure.
      *
      * @param method  One of authentication methods from {@code "basic"}, {@code "env"}, {@code "instance"},
-     *     {@code "profile"}, {@code "properties"}, {@code "anonymous"}, {@code "session"}, and {@code "default"}.
+     *     {@code "profile"}, {@code "properties"}, {@code "anonymous"}, {@code "session"}, {@code "web_identity_token"}, and {@code "default"}.
      */
     void setAuthMethod(String method);
 
@@ -117,4 +117,65 @@ interface AwsCredentialsConfig {
      * @see <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html">Named profiles</a>
      */
     void setProfileName(Optional<String> value);
+
+    /**
+     * Gets the AWS IAM Role Arn configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "web_identity_token"}.
+     *
+     * @return The AWS IAM Role Arn configured
+     * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html">AssumeRoleWithWebIdentity</a>
+     */
+    Optional<String> getRoleArn();
+
+    /**
+     * Sets an AWS IAM Role Arn to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "web_identity_token"}.
+     *
+     * @param value  The AWS IAM Role Arn to configure
+     * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html">AssumeRoleWithWebIdentity</a>
+     */
+    void setRoleArn(Optional<String> value);
+
+    /**
+     * Gets the AWS IAM Role session name configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "web_identity_token"}.
+     *
+     * @return The AWS IAM Role session name configured
+     * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html">AssumeRoleWithWebIdentity</a>
+     */
+    Optional<String> getRoleSessionName();
+
+    /**
+     * Sets an AWS IAM Role session name to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "web_identity_token"}.
+     *
+     * @param value  The AWS IAM Role session name to configure
+     * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html">AssumeRoleWithWebIdentity</a>
+     */
+    void setRoleSessionName(Optional<String> value);
+
+    /**
+     * Gets the name in a web identity token file configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "web_identity_token"}.
+     *
+     * @return The name in a web identity token file configured
+     * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html">AssumeRoleWithWebIdentity</a>
+     */
+    Optional<String> getWebIdentityTokenFile();
+
+    /**
+     * Sets a name in a web identity token file to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "web_identity_token"}.
+     *
+     * @param value  The name in a web identity token file to configure
+     * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRoleWithWebIdentity.html">AssumeRoleWithWebIdentity</a>
+     */
+    void setWebIdentityTokenFile(Optional<String> value);
+
 }
