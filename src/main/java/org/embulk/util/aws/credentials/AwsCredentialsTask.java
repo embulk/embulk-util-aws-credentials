@@ -44,7 +44,7 @@ public interface AwsCredentialsTask extends AwsCredentialsConfig {
     Optional<String> getRoleArn();
 
     @Override
-    @Config("role_seeeion_name")
+    @Config("role_session_name")
     @ConfigDefault("null")
     Optional<String> getRoleSessionName();
 
