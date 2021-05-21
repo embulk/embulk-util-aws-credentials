@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "org.embulk"
-version = "0.4.0-SNAPSHOT"
+version = "0.4.1-SNAPSHOT"
 description = "AWS client credential handler for Embulk plugins"
 
 sourceCompatibility = 1.8
@@ -20,14 +20,12 @@ configurations {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
-    compileOnly "org.embulk:embulk-api:0.10.5"
-    compileOnly "org.slf4j:slf4j-api:1.7.12"
+    compileOnly "org.embulk:embulk-api:0.10.31"
 
-    api "org.embulk:embulk-util-config:0.1.1"
+    api "org.embulk:embulk-util-config:0.3.0"
 
     api("com.amazonaws:aws-java-sdk-s3:1.11.466") {
         exclude group: "com.fasterxml.jackson.core", module: "jackson-annotations"
@@ -43,6 +41,8 @@ dependencies {
         exclude group: "commons-logging", module: "commons-logging"   // commons-logging api is provided by jcl-over-slf4j
         exclude group: "joda-time", module: "joda-time"
     }
+
+    // TODO: Upgrade this to 1.7.30 once Embulk v0.11 settles down.
     api("org.slf4j:jcl-over-slf4j:1.7.12") {  // aws-sdk uses Apache Commons Logging and Embulk uses slf4j
         exclude group: "org.slf4j", module: "slf4j-api"
     }
@@ -70,7 +70,7 @@ javadoc {
         encoding = "UTF-8"
         overview = "src/main/html/overview.html"
         links "https://docs.oracle.com/javase/8/docs/api/"
-        links "https://dev.embulk.org/embulk-util-config/0.1.1/javadoc/"
+        links "https://dev.embulk.org/embulk-util-config/0.3.0/javadoc/"
         links "https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/"
     }
 }
