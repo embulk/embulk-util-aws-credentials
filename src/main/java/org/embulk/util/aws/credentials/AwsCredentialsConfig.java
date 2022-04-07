@@ -14,7 +14,8 @@ interface AwsCredentialsConfig {
      * Sets an authentication method to configure.
      *
      * @param method  One of authentication methods from {@code "basic"}, {@code "env"}, {@code "instance"},
-     *     {@code "profile"}, {@code "properties"}, {@code "anonymous"}, {@code "session"}, and {@code "default"}.
+     *     {@code "profile"}, {@code "properties"}, {@code "anonymous"}, {@code "session"},
+     *     {@code "role"}, and {@code "default"}.
      */
     void setAuthMethod(String method);
 
@@ -117,4 +118,84 @@ interface AwsCredentialsConfig {
      * @see <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html">Named profiles</a>
      */
     void setProfileName(Optional<String> value);
+
+    /**
+     * Gets the AWS Account ID configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @return The AWS Account ID configured
+     * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html">Account ID</a>
+     */
+    Optional<String> getAccountId();
+
+    /**
+     * Sets an AWS Account ID to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @param value  An AWS Account ID to configure. (For example, {@code 0123456789})
+     * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html">Account ID</a>
+     */
+    void setAccountId(Optional<String> value);
+
+    /**
+     * Gets the AWS Role Name configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @return The AWS Role Name configured
+     * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html">Role</a>
+     */
+    Optional<String> getRoleName();
+
+    /**
+     * Sets an AWS Role Name to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @param value  An AWS Role Name to configure. (For example, {@code exampleRole})
+     * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html">Role</a>
+     */
+    void setRoleName(Optional<String> value);
+
+    /**
+     * Gets the External ID configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @return The External ID configured
+     * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">External ID</a>
+     */
+    Optional<String> getExternalId();
+
+    /**
+     * Sets an External ID to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @param value  An External ID to configure. (For example, {@code 9a59e793-355f-4729-abbc-ab612ee419e5})
+     * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">External ID</a>
+     */
+    void setExternalId(Optional<String> value);
+
+    /**
+     * Gets the Duration configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @return The External ID configured
+     * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html#id_roles_use_view-role-max-session">Duration</a>
+     */
+    int getDuration();
+
+    /**
+     * Sets a Duration to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @param value  A Duration to configure. (For example, {@code 900})
+     * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html#id_roles_use_view-role-max-session">Duration</a>
+     */
+    void setDuration(int value);
 }

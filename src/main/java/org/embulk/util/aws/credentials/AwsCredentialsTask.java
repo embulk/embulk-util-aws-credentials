@@ -37,4 +37,24 @@ public interface AwsCredentialsTask extends AwsCredentialsConfig {
     @Config("profile_name")
     @ConfigDefault("null")
     Optional<String> getProfileName();
+
+    @Override
+    @Config("account_id")
+    @ConfigDefault("null")
+    Optional<String> getAccountId();
+
+    @Override
+    @Config("role_name")
+    @ConfigDefault("null")
+    Optional<String> getRoleName();
+
+    @Override
+    @Config("external_id")
+    @ConfigDefault("null")
+    Optional<String> getExternalId();
+
+    @Override
+    @Config("duration")
+    @ConfigDefault("3600")
+    int getDuration();
 }
