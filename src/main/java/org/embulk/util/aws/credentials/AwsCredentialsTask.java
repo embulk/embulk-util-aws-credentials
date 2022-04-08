@@ -57,4 +57,14 @@ public interface AwsCredentialsTask extends AwsCredentialsConfig {
     @Config("duration")
     @ConfigDefault("3600")
     int getDuration();
+
+    @Override
+    @Config("aws_partition")
+    @ConfigDefault("\"aws\"")
+    String getAwsPartition();
+
+    @Override
+    @Config("session_name")
+    @ConfigDefault("\"treasure-data\"")
+    String getSessionName();
 }

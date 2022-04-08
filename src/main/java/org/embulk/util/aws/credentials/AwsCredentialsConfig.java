@@ -198,4 +198,44 @@ interface AwsCredentialsConfig {
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html#id_roles_use_view-role-max-session">Duration</a>
      */
     void setDuration(int value);
+
+    /**
+     * Gets the AWS Partition configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @return The AWS Partition configured
+     * @see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Partition</a>
+     */
+    String getAwsPartition();
+
+    /**
+     * Sets an AWS Partition to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @param value  An AWS Partition to configure. (For example, {@code aws})
+     * @see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Partition</a>
+     */
+    void setAwsPartition(String value);
+
+    /**
+     * Gets the Roel session name configured.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @return The Roel session name configured
+     * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">RoleSessionName</a>
+     */
+    String getSessionName();
+
+    /**
+     * Sets a Role session nam to configure.
+     *
+     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     *
+     * @param value  A Role session name to configure. (For example, {@code treasure-data})
+     * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">RoleSessionName</a>
+     */
+    void setSessionName(String value);
 }

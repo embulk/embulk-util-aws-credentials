@@ -17,7 +17,6 @@ import com.amazonaws.auth.profile.ProfilesConfigFile;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.embulk.config.ConfigException;
 import org.slf4j.Logger;
@@ -88,6 +87,9 @@ public abstract class AwsCredentials {
                 reject(task.getSessionToken(), sessionTokenOption);
                 reject(task.getProfileFile(), profileFileOption);
                 reject(task.getProfileName(), profileNameOption);
+                reject(task.getExternalId(), externalIdOption);
+                reject(task.getAccountId(), accountIdOption);
+                reject(task.getRoleName(), roleNameOption);
                 final String accessKeyId = require(task.getAccessKeyId(), "'access_key_id', 'secret_access_key'");
                 final String secretAccessKey = require(task.getSecretAccessKey(), "'secret_access_key'");
                 final BasicAWSCredentials creds = new BasicAWSCredentials(accessKeyId, secretAccessKey);
@@ -205,20 +207,18 @@ public abstract class AwsCredentials {
             reject(task.getSessionToken(), sessionTokenOption);
             reject(task.getProfileFile(), profileFileOption);
             reject(task.getProfileName(), profileNameOption);
-            String accountId = require(task.getAccountId(),
+            final String accountId = require(task.getAccountId(),
                     "'" + accountIdOption + "'");
-            String roleName = require(task.getRoleName(),
+            final String roleName = require(task.getRoleName(),
                     "'" + roleNameOption + "'");
-            String externalId = require(task.getExternalId(),
+            final String externalId = require(task.getExternalId(),
                     "'" + externalIdOption + "'");
-
-            String arn = String.format(ARN_PATTERN, accountId, roleName);
-            String sessionName = UUID.randomUUID().toString();
+            final String arn = String.format(ARN_PATTERN, task.getAwsPartition(), accountId, roleName);
 
             // use AWSSecurityTokenServiceClient with DefaultAWSCredentialsProviderChain
             // https://javadoc.io/doc/com.amazonaws/aws-java-sdk-sts/1.11.0/com/amazonaws/services/securitytoken/AWSSecurityTokenServiceClient.html#AWSSecurityTokenServiceClient()
             STSAssumeRoleSessionCredentialsProvider.Builder builder
-                    = new STSAssumeRoleSessionCredentialsProvider.Builder(arn, sessionName);
+                    = new STSAssumeRoleSessionCredentialsProvider.Builder(arn, task.getSessionName());
             return builder.withExternalId(externalId)
                     .withRoleSessionDurationSeconds(task.getDuration())
                     .build();
@@ -274,5 +274,5 @@ public abstract class AwsCredentials {
     }
 
     private static final Logger log = LoggerFactory.getLogger(AwsCredentials.class);
-    private static final String ARN_PATTERN = "arn:aws:iam::%s:role/%s";
+    private static final String ARN_PATTERN = "arn:%s:iam::%s:role/%s";
 }
