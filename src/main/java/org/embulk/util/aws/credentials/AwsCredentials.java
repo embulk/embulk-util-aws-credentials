@@ -215,6 +215,8 @@ public abstract class AwsCredentials {
             String arn = String.format(ARN_PATTERN, accountId, roleName);
             String sessionName = UUID.randomUUID().toString();
 
+            // use AWSSecurityTokenServiceClient with DefaultAWSCredentialsProviderChain
+            // https://javadoc.io/doc/com.amazonaws/aws-java-sdk-sts/1.11.0/com/amazonaws/services/securitytoken/AWSSecurityTokenServiceClient.html#AWSSecurityTokenServiceClient()
             STSAssumeRoleSessionCredentialsProvider.Builder builder
                     = new STSAssumeRoleSessionCredentialsProvider.Builder(arn, sessionName);
             return builder.withExternalId(externalId)
