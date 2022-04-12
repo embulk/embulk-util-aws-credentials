@@ -20,14 +20,12 @@ configurations {
 
 repositories {
     mavenCentral()
-    jcenter()
 }
 
 dependencies {
-    compileOnly "org.embulk:embulk-api:0.10.5"
-    compileOnly "org.slf4j:slf4j-api:1.7.12"
+    compileOnly "org.embulk:embulk-api:0.10.35"
 
-    api "org.embulk:embulk-util-config:0.1.1"
+    api "org.embulk:embulk-util-config:0.3.1"
 
     api("com.amazonaws:aws-java-sdk-s3:1.11.466") {
         exclude group: "com.fasterxml.jackson.core", module: "jackson-annotations"
@@ -70,7 +68,7 @@ javadoc {
         encoding = "UTF-8"
         overview = "src/main/html/overview.html"
         links "https://docs.oracle.com/javase/8/docs/api/"
-        links "https://dev.embulk.org/embulk-util-config/0.1.1/javadoc/"
+        links "https://dev.embulk.org/embulk-util-config/0.3.1/javadoc/"
         links "https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/"
     }
 }
