@@ -37,4 +37,34 @@ public interface AwsCredentialsTaskWithPrefix extends AwsCredentialsConfig {
     @Config("aws_profile_name")
     @ConfigDefault("null")
     Optional<String> getProfileName();
+
+    @Override
+    @Config("aws_account_id")
+    @ConfigDefault("null")
+    Optional<String> getAccountId();
+
+    @Override
+    @Config("aws_role_name")
+    @ConfigDefault("null")
+    Optional<String> getRoleName();
+
+    @Override
+    @Config("aws_external_id")
+    @ConfigDefault("null")
+    Optional<String> getExternalId();
+
+    @Override
+    @Config("aws_duration_in_seconds")
+    @ConfigDefault("3600")
+    int getDurationInSeconds();
+
+    @Override
+    @Config("aws_arn_partition")
+    @ConfigDefault("\"aws\"")
+    String getArnPartition();
+
+    @Override
+    @Config("aws_session_name")
+    @ConfigDefault("\"embulk\"")
+    String getSessionName();
 }

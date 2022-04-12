@@ -39,9 +39,9 @@ public interface AwsCredentialsTask extends AwsCredentialsConfig {
     Optional<String> getProfileName();
 
     @Override
-    @Config("aws_account_id")
+    @Config("account_id")
     @ConfigDefault("null")
-    Optional<String> getAwsAccountId();
+    Optional<String> getAccountId();
 
     @Override
     @Config("role_name")
@@ -59,12 +59,12 @@ public interface AwsCredentialsTask extends AwsCredentialsConfig {
     int getDurationInSeconds();
 
     @Override
-    @Config("aws_partition")
+    @Config("arn_partition")
     @ConfigDefault("\"aws\"")
-    String getAwsPartition();
+    String getArnPartition();
 
     @Override
     @Config("session_name")
-    @ConfigDefault("\"treasure-data\"")
+    @ConfigDefault("\"embulk\"")
     String getSessionName();
 }

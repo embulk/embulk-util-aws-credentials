@@ -127,7 +127,7 @@ interface AwsCredentialsConfig {
      * @return The AWS Account ID configured
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html">Account ID</a>
      */
-    Optional<String> getAwsAccountId();
+    Optional<String> getAccountId();
 
     /**
      * Sets an AWS Account ID to configure.
@@ -137,7 +137,7 @@ interface AwsCredentialsConfig {
      * @param value  An AWS Account ID to configure. (For example, {@code 0123456789})
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html">Account ID</a>
      */
-    void setAwsAccountId(Optional<String> value);
+    void setAccountId(Optional<String> value);
 
     /**
      * Gets the AWS Role Name configured.
@@ -200,27 +200,27 @@ interface AwsCredentialsConfig {
     void setDurationInSeconds(int value);
 
     /**
-     * Gets the AWS Partition configured.
+     * Gets the ARN Partition configured.
      *
      * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
-     * @return The AWS Partition configured
+     * @return The ARN Partition configured
      * @see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Partition</a>
      */
-    String getAwsPartition();
+    String getArnPartition();
 
     /**
-     * Sets an AWS Partition to configure.
+     * Sets an ARN Partition to configure.
      *
      * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
-     * @param value  An AWS Partition to configure. (For example, {@code aws})
+     * @param value  An ARN Partition to configure. (For example, {@code aws})
      * @see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Partition</a>
      */
-    void setAwsPartition(String value);
+    void setArnPartition(String value);
 
     /**
-     * Gets the Roel session name configured.
+     * Gets the Role session name configured.
      *
      * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
@@ -230,7 +230,7 @@ interface AwsCredentialsConfig {
     String getSessionName();
 
     /**
-     * Sets a Role session nam to configure.
+     * Sets a Role session name to configure.
      *
      * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
