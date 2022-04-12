@@ -15,7 +15,7 @@ interface AwsCredentialsConfig {
      *
      * @param method  One of authentication methods from {@code "basic"}, {@code "env"}, {@code "instance"},
      *     {@code "profile"}, {@code "properties"}, {@code "anonymous"}, {@code "session"},
-     *     {@code "role"}, and {@code "default"}.
+     *     {@code "assume_role"}, and {@code "default"}.
      */
     void setAuthMethod(String method);
 
