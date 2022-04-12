@@ -57,7 +57,7 @@ public abstract class AwsCredentials {
         String profileNameOption = prefix + "profile_name";
         String accessKeyIdOption = prefix + "access_key_id";
         String secretAccessKeyOption = prefix + "secret_access_key";
-        String accountIdOption = prefix + "account_id";
+        String awsAccountIdOption = prefix + "aws_account_id";
         String roleNameOption = prefix + "role_name";
         String externalIdOption = prefix + "external_id";
 
@@ -72,7 +72,7 @@ public abstract class AwsCredentials {
                 reject(task.getSessionToken(), sessionTokenOption);
                 reject(task.getProfileFile(), profileFileOption);
                 reject(task.getProfileName(), profileNameOption);
-                reject(task.getAccountId(), accountIdOption);
+                reject(task.getAwsAccountId(), awsAccountIdOption);
                 reject(task.getRoleName(), roleNameOption);
                 reject(task.getExternalId(), externalIdOption);
                 return new AWSCredentialsProvider() {
@@ -88,7 +88,7 @@ public abstract class AwsCredentials {
                 reject(task.getProfileFile(), profileFileOption);
                 reject(task.getProfileName(), profileNameOption);
                 reject(task.getExternalId(), externalIdOption);
-                reject(task.getAccountId(), accountIdOption);
+                reject(task.getAwsAccountId(), awsAccountIdOption);
                 reject(task.getRoleName(), roleNameOption);
                 final String accessKeyId = require(task.getAccessKeyId(), "'access_key_id', 'secret_access_key'");
                 final String secretAccessKey = require(task.getSecretAccessKey(), "'secret_access_key'");
@@ -109,7 +109,7 @@ public abstract class AwsCredentials {
             reject(task.getSessionToken(), sessionTokenOption);
             reject(task.getProfileFile(), profileFileOption);
             reject(task.getProfileName(), profileNameOption);
-            reject(task.getAccountId(), accountIdOption);
+            reject(task.getAwsAccountId(), awsAccountIdOption);
             reject(task.getRoleName(), roleNameOption);
             reject(task.getExternalId(), externalIdOption);
             return overwriteBasicCredentials(task, new EnvironmentVariableCredentialsProvider().getCredentials());
@@ -120,7 +120,7 @@ public abstract class AwsCredentials {
             reject(task.getSessionToken(), sessionTokenOption);
             reject(task.getProfileFile(), profileFileOption);
             reject(task.getProfileName(), profileNameOption);
-            reject(task.getAccountId(), accountIdOption);
+            reject(task.getAwsAccountId(), awsAccountIdOption);
             reject(task.getRoleName(), roleNameOption);
             reject(task.getExternalId(), externalIdOption);
             return createInstanceProfileCredentialsProvider();
@@ -130,7 +130,7 @@ public abstract class AwsCredentials {
             reject(task.getAccessKeyId(), accessKeyIdOption);
             reject(task.getSecretAccessKey(), secretAccessKeyOption);
             reject(task.getSessionToken(), sessionTokenOption);
-            reject(task.getAccountId(), accountIdOption);
+            reject(task.getAwsAccountId(), awsAccountIdOption);
             reject(task.getRoleName(), roleNameOption);
             reject(task.getExternalId(), externalIdOption);
 
@@ -153,7 +153,7 @@ public abstract class AwsCredentials {
             reject(task.getSessionToken(), sessionTokenOption);
             reject(task.getProfileFile(), profileFileOption);
             reject(task.getProfileName(), profileNameOption);
-            reject(task.getAccountId(), accountIdOption);
+            reject(task.getAwsAccountId(), awsAccountIdOption);
             reject(task.getRoleName(), roleNameOption);
             reject(task.getExternalId(), externalIdOption);
             return overwriteBasicCredentials(task, new SystemPropertiesCredentialsProvider().getCredentials());
@@ -164,7 +164,7 @@ public abstract class AwsCredentials {
             reject(task.getSessionToken(), sessionTokenOption);
             reject(task.getProfileFile(), profileFileOption);
             reject(task.getProfileName(), profileNameOption);
-            reject(task.getAccountId(), accountIdOption);
+            reject(task.getAwsAccountId(), awsAccountIdOption);
             reject(task.getRoleName(), roleNameOption);
             reject(task.getExternalId(), externalIdOption);
             return new AWSCredentialsProvider() {
@@ -186,7 +186,7 @@ public abstract class AwsCredentials {
                     "'" + sessionTokenOption + "'");
             reject(task.getProfileFile(), profileFileOption);
             reject(task.getProfileName(), profileNameOption);
-            reject(task.getAccountId(), accountIdOption);
+            reject(task.getAwsAccountId(), awsAccountIdOption);
             reject(task.getRoleName(), roleNameOption);
             reject(task.getExternalId(), externalIdOption);
             final AWSSessionCredentials creds = new BasicSessionCredentials(accessKeyId, secretAccessKey, sessionToken);
@@ -200,15 +200,15 @@ public abstract class AwsCredentials {
             };
         }
 
-        case "role":
+        case "assume_role":
         {
             reject(task.getAccessKeyId(), accessKeyIdOption);
             reject(task.getSecretAccessKey(), secretAccessKeyOption);
             reject(task.getSessionToken(), sessionTokenOption);
             reject(task.getProfileFile(), profileFileOption);
             reject(task.getProfileName(), profileNameOption);
-            final String accountId = require(task.getAccountId(),
-                    "'" + accountIdOption + "'");
+            final String accountId = require(task.getAwsAccountId(),
+                    "'" + awsAccountIdOption + "'");
             final String roleName = require(task.getRoleName(),
                     "'" + roleNameOption + "'");
             final String externalId = require(task.getExternalId(),
@@ -220,7 +220,7 @@ public abstract class AwsCredentials {
             STSAssumeRoleSessionCredentialsProvider.Builder builder
                     = new STSAssumeRoleSessionCredentialsProvider.Builder(arn, task.getSessionName());
             return builder.withExternalId(externalId)
-                    .withRoleSessionDurationSeconds(task.getDuration())
+                    .withRoleSessionDurationSeconds(task.getDurationInSeconds())
                     .build();
         }
 
@@ -231,7 +231,7 @@ public abstract class AwsCredentials {
             reject(task.getSessionToken(), sessionTokenOption);
             reject(task.getProfileFile(), profileFileOption);
             reject(task.getProfileName(), profileNameOption);
-            reject(task.getAccountId(), accountIdOption);
+            reject(task.getAwsAccountId(), awsAccountIdOption);
             reject(task.getRoleName(), roleNameOption);
             reject(task.getExternalId(), externalIdOption);
             return new DefaultAWSCredentialsProviderChain();

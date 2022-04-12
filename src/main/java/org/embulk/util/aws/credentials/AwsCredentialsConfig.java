@@ -122,27 +122,27 @@ interface AwsCredentialsConfig {
     /**
      * Gets the AWS Account ID configured.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @return The AWS Account ID configured
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html">Account ID</a>
      */
-    Optional<String> getAccountId();
+    Optional<String> getAwsAccountId();
 
     /**
      * Sets an AWS Account ID to configure.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @param value  An AWS Account ID to configure. (For example, {@code 0123456789})
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/console_account-alias.html">Account ID</a>
      */
-    void setAccountId(Optional<String> value);
+    void setAwsAccountId(Optional<String> value);
 
     /**
      * Gets the AWS Role Name configured.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @return The AWS Role Name configured
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html">Role</a>
@@ -152,7 +152,7 @@ interface AwsCredentialsConfig {
     /**
      * Sets an AWS Role Name to configure.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @param value  An AWS Role Name to configure. (For example, {@code exampleRole})
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html">Role</a>
@@ -162,7 +162,7 @@ interface AwsCredentialsConfig {
     /**
      * Gets the External ID configured.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @return The External ID configured
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">External ID</a>
@@ -172,7 +172,7 @@ interface AwsCredentialsConfig {
     /**
      * Sets an External ID to configure.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @param value  An External ID to configure. (For example, {@code 9a59e793-355f-4729-abbc-ab612ee419e5})
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html">External ID</a>
@@ -180,29 +180,29 @@ interface AwsCredentialsConfig {
     void setExternalId(Optional<String> value);
 
     /**
-     * Gets the Duration configured.
+     * Gets the Duration in seconds configured.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
-     * @return The External ID configured
+     * @return The Duration in seconds configured
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html#id_roles_use_view-role-max-session">Duration</a>
      */
-    int getDuration();
+    int getDurationInSeconds();
 
     /**
-     * Sets a Duration to configure.
+     * Sets a Duration in seconds to configure.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
-     * @param value  A Duration to configure. (For example, {@code 900})
+     * @param value  A Duration in seconds to configure. (For example, {@code 900})
      * @see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html#id_roles_use_view-role-max-session">Duration</a>
      */
-    void setDuration(int value);
+    void setDurationInSeconds(int value);
 
     /**
      * Gets the AWS Partition configured.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @return The AWS Partition configured
      * @see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Partition</a>
@@ -212,7 +212,7 @@ interface AwsCredentialsConfig {
     /**
      * Sets an AWS Partition to configure.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @param value  An AWS Partition to configure. (For example, {@code aws})
      * @see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Partition</a>
@@ -222,7 +222,7 @@ interface AwsCredentialsConfig {
     /**
      * Gets the Roel session name configured.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @return The Roel session name configured
      * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">RoleSessionName</a>
@@ -232,7 +232,7 @@ interface AwsCredentialsConfig {
     /**
      * Sets a Role session nam to configure.
      *
-     * <p>It is available only when the authentication method is set to: {@code "role"}.
+     * <p>It is available only when the authentication method is set to: {@code "assume_role"}.
      *
      * @param value  A Role session name to configure. (For example, {@code treasure-data})
      * @see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">RoleSessionName</a>
