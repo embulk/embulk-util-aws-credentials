@@ -1,0 +1,26 @@
+name: Publish
+on:
+  push:
+    tags:
+      - "v0.*"
+jobs:
+  publish:
+    environment:
+      name: maven-central
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up OpenJDK 8
+      uses: actions/setup-java@v3
+      with:
+        java-version: 8
+        distribution: "temurin"
+    - name: Publish
+      run: ./gradlew --stacktrace publishMavenPublicationToMavenCentralRepository
+      env:
+        ORG_GRADLE_PROJECT_ossrhUsername: ${{ vars.OSSRH_USERNAME }}
+        ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSRH_PASSWORD }}
+        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY_ARMOR }}
+        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
