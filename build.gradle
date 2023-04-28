@@ -6,20 +6,31 @@ plugins {
     id "checkstyle"
 }
 
+repositories {
+    mavenCentral()
+}
+
 group = "org.embulk"
 version = "0.4.2-SNAPSHOT"
 description = "AWS client credential handler for Embulk plugins"
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 configurations {
     compileClasspath.resolutionStrategy.activateDependencyLocking()
     runtimeClasspath.resolutionStrategy.activateDependencyLocking()
 }
 
-repositories {
-    mavenCentral()
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    options.encoding = "UTF-8"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+
+    withJavadocJar()
+    withSourcesJar()
 }
 
 dependencies {
@@ -51,16 +62,6 @@ dependencies {
     api "joda-time:joda-time:2.9.2"
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    options.encoding = "UTF-8"
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
 javadoc {
     title = "${project.name} v${project.version}"
     options {
@@ -73,30 +74,35 @@ javadoc {
     }
 }
 
-test {
-    testLogging {
-        outputs.upToDateWhen { false }
-        showStandardStreams = true
+jar {
+    metaInf {
+        from rootProject.file("LICENSE")
     }
 }
 
-jar {
-    from rootProject.file("LICENSE")
-}
-
 sourcesJar {
-    from rootProject.file("LICENSE")
+    metaInf {
+        from rootProject.file("LICENSE")
+    }
 }
 
 javadocJar {
-    from rootProject.file("LICENSE")
+    metaInf {
+        from rootProject.file("LICENSE")
+    }
+}
+
+// It should not publish a `.module` file in Maven Central.
+// https://docs.gradle.org/current/userguide/publishing_gradle_module_metadata.html#sub:disabling-gmm-publication
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
 }
 
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId = "${project.group}"
-            artifactId = "${project.name}"
+            groupId = project.group
+            artifactId = project.name
 
             from components.java
             // javadocJar and sourcesJar are added by java.withJavadocJar() and java.withSourcesJar() above.
@@ -105,8 +111,8 @@ publishing {
             pom {  // https://central.sonatype.org/pages/requirements.html
                 packaging "jar"
 
-                name = "${project.name}"
-                description = "${project.description}"
+                name = project.name
+                description = project.description
                 url = "https://www.embulk.org/"
 
                 licenses {
@@ -165,6 +171,18 @@ signing {
         useInMemoryPgpKeys(signingKey, signingPassword)
     }
     sign publishing.publications.maven
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showCauses = true
+        showExceptions = true
+        showStackTraces = true
+        showStandardStreams = true
+        outputs.upToDateWhen { false }
+    }
 }
 
 checkstyle {
