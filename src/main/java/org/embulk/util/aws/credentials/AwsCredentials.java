@@ -218,7 +218,10 @@ public abstract class AwsCredentials {
             STSAssumeRoleSessionCredentialsProvider.Builder builder
                     = new STSAssumeRoleSessionCredentialsProvider.Builder(arn, task.getSessionName());
             if (task.getExternalId().isPresent()) {
+                log.info("ExternalId is specified with AssumeRole.");
                 builder.withExternalId(task.getExternalId().get());
+            } else {
+                log.info("ExternalId is not specified for AssumeRole.");
             }
             return builder.withRoleSessionDurationSeconds(task.getDurationInSeconds())
                     .build();
