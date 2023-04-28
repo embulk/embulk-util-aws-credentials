@@ -211,16 +211,16 @@ public abstract class AwsCredentials {
                     "'" + accountIdOption + "'");
             final String roleName = require(task.getRoleName(),
                     "'" + roleNameOption + "'");
-            final String externalId = require(task.getExternalId(),
-                    "'" + externalIdOption + "'");
             final String arn = String.format(ARN_PATTERN, task.getArnPartition(), accountId, roleName);
 
             // use AWSSecurityTokenServiceClient with DefaultAWSCredentialsProviderChain
             // https://javadoc.io/doc/com.amazonaws/aws-java-sdk-sts/1.11.0/com/amazonaws/services/securitytoken/AWSSecurityTokenServiceClient.html#AWSSecurityTokenServiceClient()
             STSAssumeRoleSessionCredentialsProvider.Builder builder
                     = new STSAssumeRoleSessionCredentialsProvider.Builder(arn, task.getSessionName());
-            return builder.withExternalId(externalId)
-                    .withRoleSessionDurationSeconds(task.getDurationInSeconds())
+            if (task.getExternalId().isPresent()) {
+                builder.withExternalId(task.getExternalId().get());
+            }
+            return builder.withRoleSessionDurationSeconds(task.getDurationInSeconds())
                     .build();
         }
 
